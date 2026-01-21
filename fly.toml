@@ -1,4 +1,4 @@
-app = "SEU-APP-NAME-AQUI"
+app = "go-test-ids2cq"
 primary_region = "gru"
 
 [build]
