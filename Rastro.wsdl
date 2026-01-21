@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<definitions name="Rastro"
+             targetNamespace="urn:PREPS"
+             xmlns:typens="urn:PREPS"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+             xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+             xmlns="http://schemas.xmlsoap.org/wsdl/">
+
+  <types>
+    <xsd:schema xmlns="http://www.w3.org/2001/XMLSchema"
+                targetNamespace="urn:PREPS">
+            
+      <xsd:complexType name="LeituraSensor">
+        <xsd:all>
+          <xsd:element name="tipoSensor"             type="xsd:unsignedInt"/>
+          <xsd:element name="valor"                  type="xsd:string"/>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="LeituraSensores">
+        <xsd:complexContent>
+          <xsd:restriction base="soapenc:Array">
+             <xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:LeituraSensor[]"/>
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="Ponto">
+        <xsd:all>
+          <xsd:element name="latitude"              type="xsd:double"/>
+          <xsd:element name="longitude"             type="xsd:double"/>
+          <xsd:element name="dataHora"              type="xsd:dateTime"/>
+          <xsd:element name="leituraSensores"       type="typens:LeituraSensores"/>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="Pontos">
+        <xsd:complexContent>
+          <xsd:restriction base="soapenc:Array">
+             <xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:Ponto[]"/>
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="TipoSensor">
+        <xsd:all>
+          <xsd:element name="codigoSensor"          type="xsd:unsignedInt"/>
+          <xsd:element name="descricaoSensor"       type="xsd:string"/>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="TiposSensores">
+        <xsd:complexContent>
+          <xsd:restriction base="soapenc:Array">
+             <xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:TipoSensor[]"/>
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="Embarcacao">
+        <xsd:all>
+          <xsd:element name="codigoEmbarcacao"      type="xsd:string"/>
+          <xsd:element name="nomeEmbarcacao"        type="xsd:string"/>
+          <xsd:element name="descricaoEmbarcacao"   type="xsd:string"/>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="Embarcacoes">
+        <xsd:complexContent>
+          <xsd:restriction base="soapenc:Array">
+             <xsd:attribute ref="soapenc:arrayType" wsdl:arrayType="typens:Embarcacao[]"/>
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+    </xsd:schema>
+  </types> 
+
+  <message name="registraPontosRequest">
+    <part name="autenticacao"                       type="xsd:string"/>
+    <part name="codigoEmbarcacao"                   type="xsd:string"/>
+    <part name="pontosEmbarcacao"                   type="typens:Pontos"/>
+  </message>
+
+  <message name="registraPontosResponse">
+    <part name="confirmacao"                        type="xsd:string"/>
+  </message>
+
+  <message name="consultaPontosRequest">
+    <part name="autenticacao"                       type="xsd:string"/>
+    <part name="codigoEmbarcacao"                   type="xsd:string"/>
+    <part name="dataInicial"                        type="xsd:dateTime"/>
+    <part name="dataFinal"                          type="xsd:dateTime"/>
+  </message>
+
+  <message name="consultaPontosResponse">
+    <part name="pontos"                             type="typens:Pontos"/>
+  </message>
+
+  <message name="consultaEmbarcacoesRequest">
+    <part name="autenticacao"                       type="xsd:string"/>
+  </message>
+
+  <message name="consultaEmbarcacoesResponse">
+    <part name="embarcacoes"                        type="typens:Embarcacoes"/>
+  </message>
+
+  <message name="consultaSensoresRequest">
+  </message>
+
+  <message name="consultaSensoresResponse">
+    <part name="tiposSensores"                      type="typens:TiposSensores"/>
+  </message>
+
+  <message name="consultaVersaoRequest">
+  </message>
+
+  <message name="consultaVersaoResponse">
+    <part name="versao"                             type="xsd:string"/>
+  </message>
+
+
+
+  <portType name="RastroPort">
+
+    <operation name="registraPontos">
+	  <documentation>Entrega de pontos e dados de sensores para embarcações</documentation>
+      <input message="typens:registraPontosRequest"/>
+      <output message="typens:registraPontosResponse"/>
+    </operation>
+
+    <operation name="consultaPontos">
+	  <documentation>Consulta a pontos e dados de sensores cadastrados</documentation>
+      <input message="typens:consultaPontosRequest"/>
+      <output message="typens:consultaPontosResponse"/>
+    </operation>
+
+    <operation name="consultaEmbarcacoes">
+	  <documentation>Consulta a listagem de embarcações</documentation>
+      <input message="typens:consultaEmbarcacoesRequest"/>
+      <output message="typens:consultaEmbarcacoesResponse"/>
+    </operation>
+
+    <operation name="consultaSensores">
+	  <documentation>Consulta a listagem de tipos de sensores</documentation>
+      <input message="typens:consultaSensoresRequest"/>
+      <output message="typens:consultaSensoresResponse"/>
+    </operation>
+
+    <operation name="consultaVersao">
+	  <documentation>Consulta a versão do webservice</documentation>
+      <input message="typens:consultaVersaoRequest"/>
+      <output message="typens:consultaVersaoResponse"/>
+    </operation>
+
+  </portType>
+
+  <binding name="RastroBinding" type="typens:RastroPort">
+    <soap:binding style="rpc"
+                  transport="http://schemas.xmlsoap.org/soap/http"/>
+
+    <operation name="registraPontos">
+      <soap:operation soapAction="urn:RastroAction"/>
+      <input>
+        <soap:body use="encoded"
+                   namespace="urn:PREPS"
+                   encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </input>
+      <output>
+        <soap:body use="encoded"
+                   namespace="urn:PREPS"
+                   encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </output>
+    </operation>
+
+    <operation name="consultaPontos">
+      <soap:operation soapAction="urn:RastroAction"/>
+      <input>
+        <soap:body use="encoded"
+                   namespace="urn:PREPS"
+                   encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </input>
+      <output>
+        <soap:body use="encoded"
+                   namespace="urn:PREPS"
+                   encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </output>
+    </operation>
+
+    <operation name="consultaEmbarcacoes">
+      <soap:operation soapAction="urn:RastroAction"/>
+      <input>
+        <soap:body use="encoded"
+                   namespace="urn:PREPS"
+                   encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </input>
+      <output>
+        <soap:body use="encoded"
+                   namespace="urn:PREPS"
+                   encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </output>
+    </operation>
+
+    <operation name="consultaSensores">
+      <soap:operation soapAction="urn:RastroAction"/>
+      <input>
+        <soap:body use="encoded"
+                   namespace="urn:PREPS"
+                   encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </input>
+      <output>
+        <soap:body use="encoded"
+                   namespace="urn:PREPS"
+                   encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </output>
+    </operation>
+
+    <operation name="consultaVersao">
+      <soap:operation soapAction="urn:RastroAction"/>
+      <input>
+        <soap:body use="encoded"
+                   namespace="urn:PREPS"
+                   encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </input>
+      <output>
+        <soap:body use="encoded"
+                   namespace="urn:PREPS"
+                   encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </output>
+    </operation>
+  </binding>
+
+  <service name="Rastro">
+    <documentation>Webservice para entrega de dados de rastreamento do PREPS</documentation>
+    <port name="RastroPort" binding="typens:RastroBinding">
+      <soap:address location="http://siaiacad13.univali.br/preps/webservices/rastro"/>
+    </port>
+  </service>
+
+</definitions>

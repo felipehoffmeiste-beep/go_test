@@ -1,0 +1,8 @@
+go_soap_test.exe
+__pycache__
+*.pyc
+venv/
+.git
+.gitignore
+*.md
+.DS_Store
